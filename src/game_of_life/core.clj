@@ -13,10 +13,10 @@
         adder (fn [m k] (assoc m k (inc (get m k 0))))]
     (reduce adder {} neighbors)))
 
-(defn get-next-lives [f m s]
+(defn update-cells [f m s]
   (apply hash-set (for [[k n] m :let [a (contains? s k)] :when (f a n)] k)))
 
-(defn step [s] (get-next-lives conways-rule (count-adjacent-cells s) s))
+(defn step [s] (update-cells conways-rule (count-adjacent-cells s) s))
 
 (defn -main [& args]
   nil)

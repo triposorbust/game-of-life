@@ -18,9 +18,9 @@
       (is (contains? next-rod [6 8]))
       (is (contains? next-rod [8 8])))))
 
-(deftest test-get-next-lives
+(deftest test-update-cells
   (testing "Basic rules for cell initiation / propagation / termination."
-    (let [update (fn [m s] (get-next-lives conways-rule m s))]
+    (let [update (fn [m s] (update-cells conways-rule m s))]
 
       ;; Termination (as if by underpopulation).
       (is (empty? (update {:cell 0} #{:cell})))
