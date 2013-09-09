@@ -13,10 +13,13 @@
         increment-map-at-key (fn [m k] (assoc m k (inc (get m k 0))))]
     (reduce increment-map-at-key {} all-neighbors)))
 
-(defn update-cells [f m s]
-  (apply hash-set (for [[k n] m :let [a (contains? s k)] :when (f a n)] k)))
+(defn update-cells [survival-rule neighbor-count-map live-cell-set]
+  (apply hash-set (for [[cell number-of-neighbors] neighbor-count-map
+                        :let [alive (contains? live-cell-set cell)]
+                        :when (survival-rule alive number-of-neighbors)] cell)))
 
-(defn step [s] (update-cells conways-rule (count-adjacent-cells s) s))
+(defn step [s]
+  (update-cells conways-rule (count-adjacent-cells s) s))
 
 (defn -main [& args]
   nil)
