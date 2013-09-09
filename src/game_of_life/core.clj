@@ -20,6 +20,3 @@
 
 (defn step [s]
   (update-cells conways-rule (count-adjacent-cells s) s))
-
-(defn -main [& args]
-  nil)

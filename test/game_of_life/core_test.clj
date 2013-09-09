@@ -2,6 +2,23 @@
   (:require [clojure.test :refer :all]
             [game-of-life.core :refer :all]))
 
+(deftest test-conways-rule
+  (testing "Rules for cell initiation / propagation / termination."
+
+    ;; Live cells die with {0,1} neighbors die, as if by underpopulation.
+    (is (false? (conways-rule true 0)))
+    (is (false? (conways-rule true 1)))
+
+    ;; Live cells with {2,3} neighbors propagate.
+    (is (true? (conways-rule true 2)))
+    (is (true? (conways-rule true 3)))
+
+    ;; Live cells with {4,} neighbors die, as if by overpopulation.
+    (is (false? (conways-rule true 4)))
+
+    ;; Empty cells with 3 neighbors are born, as if by reproduction.
+    (is (true? (conways-rule false 3)))))
+
 (deftest test-step
   (testing "Test some basic game of life patterns"
 
@@ -17,21 +34,3 @@
       (is (contains? next-rod [7 8]))
       (is (contains? next-rod [6 8]))
       (is (contains? next-rod [8 8])))))
-
-(deftest test-update-cells
-  (testing "Basic rules for cell initiation / propagation / termination."
-    (let [update (fn [m s] (update-cells conways-rule m s))]
-
-      ;; Termination (as if by underpopulation).
-      (is (empty? (update {:cell 0} #{:cell})))
-      (is (empty? (update {:cell 1} #{:cell})))
-
-      ;; Propagation of living cells.
-      (is (contains? (update {:cell 2} #{:cell}) :cell))
-      (is (contains? (update {:cell 3} #{:cell}) :cell))
-
-      ;; Termination (as if by overpopulation).
-      (is (empty? (update {:cell 4} #{:cell})))
-
-      ;; Initiation of new cells.
-      (is (contains?  (update {:cell 3} #{}) :cell)))))
