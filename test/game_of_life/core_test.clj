@@ -16,7 +16,7 @@
       (is (= (count next-rod) 3))
       (is (contains? next-rod [7 8]))
       (is (contains? next-rod [6 8]))
-      (is (contains? next-rod [8 8]))) ))))
+      (is (contains? next-rod [8 8])))))
 
 (deftest test-get-next-lives
   (testing "Basic rules for cell initiation / propagation / termination."
