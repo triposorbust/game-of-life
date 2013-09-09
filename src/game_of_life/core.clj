@@ -1,23 +1,24 @@
 (ns game-of-life.core)
 
 (defn generate-neighbors [[x y]]
-  "Displaces one square in each direction, generating 8 neighbours on a 
-   square grid."
-  (for [dx [-1 0 1] dy [-1 0 1] :when (or (not= dx 0) (not= dy 0))]
+  (for [dx [-1 0 1] dy [-1 0 1] :when (not= [dx dy] [0 0])]
     [(+ x dx) (+ y dy)]))
 
+(defn make-adjacency-counts [xys]
+  (let [neighbors (mapcat generate-neighbors xys)
+        adder (fn [m k] (assoc m k (inc (get m k 0))))]
+    (reduce adder {} neighbors)))
 
 (defn get-next-lives [m s]
-  "Applies a set of rules to determine whether a cell is alive or dead
-   in the next step, based on the adjacency counts in map and the status
-   s in the current time step."
-  (let [adjacent-cells  (fn [k] (get m k 0))
-        alive?          (fn [k] (contains? s k))
-        survives?       (fn [k] (let [n (adjacent-cells k)]
-                                  (and (alive? k) (or (= n 2) (= n 3)))))
-        newly-born?     (fn [k] (let [n (adjacent-cells k)]
-                                  (and (not (alive? k)) (= n 3))))]
+  (let [adjacent-cells (fn [k] (get m k 0))
+        alive?         (fn [k] (contains? s k))
+        survives?      (fn [k] (let [n (adjacent-cells k)]
+                                 (and (alive? k) (or (= n 2) (= n 3)))))
+        newly-born?    (fn [k] (let [n (adjacent-cells k)]
+                                 (and (not (alive? k)) (= n 3))))]
     (apply hash-set (for [[k _] m :when (or (survives? k) (newly-born? k))] k))))
+
+(defn step [s] (get-next-lives (make-adjacency-counts s) s))
 
 (defn -main [& args]
   nil)
