@@ -1,4 +1,5 @@
 (ns game-of-life.vis
+  (:gen-class :main true)
   (:require [game-of-life.core :refer [make-step-function]]
             [game-of-life.rules :refer :all]
             [quil.core :as qc]))
