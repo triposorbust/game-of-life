@@ -1,8 +1,5 @@
 (ns game-of-life.vis
-  (:gen-class :main true)
-  (:require [game-of-life.core :refer [make-step-function]]
-            [game-of-life.rules :refer :all]
-            [clojure.set :refer [union intersection]]
+  (:require [clojure.set :refer [union intersection]]
             [quil.core :as qc]))
 
 (def stall-threshold 0.02)
@@ -37,21 +34,18 @@
                             py (+ offset (* y pixels-per-square))]]
       (qc/ellipse px py diam diam))))
 
-(defn run [survival-rule]
-  (let [step (make-step-function survival-rule)]
-    (qc/defsketch cellular-automata
-      :title "Cellular Automata!"
-      :setup setup
-      :draw (fn draw-function[]
-              (draw-world @world)
-              (let [new-world (step @world)]
-                (if (> (- (count (union new-world @world))
-                          (count (intersection new-world @world)))
-                       (* stall-threshold number-of-squares number-of-squares))
-                  (reset! world (wrap-positions new-world))
-                  (reset! world (initialize-world)))))
-      :size [(* pixels-per-square number-of-squares)
-             (* pixels-per-square number-of-squares)])))
+(defn run [step-function]
+  (qc/defsketch cellular-automata
+    :title "Cellular Automata!"
+    :setup setup
+    :draw (fn draw-function []
+            (draw-world @world)
+            (let [new-world (step-function @world)]
+              (if (> (- (count (union new-world @world))
+                        (count (intersection new-world @world)))
+                     (* stall-threshold number-of-squares number-of-squares))
+                (reset! world (wrap-positions new-world))
+                (reset! world (initialize-world)))))
+    :size [(* pixels-per-square number-of-squares)
+           (* pixels-per-square number-of-squares)]))
 
-(defn -main [& args]
-  (run conways-rule))
