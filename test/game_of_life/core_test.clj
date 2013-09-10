@@ -2,6 +2,8 @@
   (:require [clojure.test :refer :all]
             [game-of-life.core :refer :all]))
 
+(def step (make-step-function conways-rule))
+
 (deftest test-conways-rule
   (testing "Rules for cell initiation / propagation / termination."
 

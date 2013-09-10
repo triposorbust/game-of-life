@@ -18,5 +18,5 @@
                         :let [alive (contains? live-cell-set cell)]
                         :when (survival-rule alive number-of-neighbors)] cell)))
 
-(defn step [s]
-  (update-cells conways-rule (count-adjacent-cells s) s))
+(defn make-step-function [survival-rule]
+  (fn [s] (update-cells survival-rule (count-adjacent-cells s) s)))
