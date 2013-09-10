@@ -6,4 +6,3 @@
 
 (defn -main [& args]
   (run (make-step-function conways-rule)))
-

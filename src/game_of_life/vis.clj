@@ -48,4 +48,3 @@
                 (reset! world (initialize-world)))))
     :size [(* pixels-per-square number-of-squares)
            (* pixels-per-square number-of-squares)]))
-
