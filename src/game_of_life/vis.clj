@@ -23,13 +23,13 @@
 (defn setup []
   (qc/smooth)
   (qc/frame-rate 5)
-  (qc/background 200))
+  (qc/background 220))
 
 (defn draw-world [xys]
-  (qc/background 200)
+  (qc/background 220)
   (qc/stroke 0)
-  (qc/stroke-weight 0)
-  (qc/fill 20)
+  (qc/stroke-weight 2)
+  (qc/fill 150)
   
   (let [diam   (/ pixels-per-square 2)
         offset (/ pixels-per-square 2)]
