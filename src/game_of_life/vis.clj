@@ -19,7 +19,7 @@
 
 (defn setup []
   (qc/smooth)
-  (qc/frame-rate 1)
+  (qc/frame-rate 5)
   (qc/background 200))
 
 (defn draw-world [xys]
@@ -40,12 +40,11 @@
       :title "Cellular Automata!"
       :setup setup
       :draw (fn draw-function[]
-              (println (count @world))
               (draw-world @world)
-              (reset! world (wrap-positions (step @world))))
+              (reset! world (wrap-positions (step @world)))
+              (when (= 0 (count @world)) (reset! world (initialize-world))))
       :size [(* pixels-per-square number-of-squares)
              (* pixels-per-square number-of-squares)])))
 
 (defn -main [& args]
-  (if-let [survival-rule (symbol "conways-rule")]
-    (run survival-rule)))
+  (run conways-rule))
