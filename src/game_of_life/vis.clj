@@ -2,8 +2,10 @@
   (:gen-class :main true)
   (:require [game-of-life.core :refer [make-step-function]]
             [game-of-life.rules :refer :all]
+            [clojure.set :refer [union intersection]]
             [quil.core :as qc]))
 
+(def stall-threshold 0.02)
 (def initial-density 0.25)
 (def pixels-per-square 14)
 (def number-of-squares 35)
@@ -42,8 +44,12 @@
       :setup setup
       :draw (fn draw-function[]
               (draw-world @world)
-              (reset! world (wrap-positions (step @world)))
-              (when (= 0 (count @world)) (reset! world (initialize-world))))
+              (let [new-world (step @world)]
+                (if (> (- (count (union new-world @world))
+                          (count (intersection new-world @world)))
+                       (* stall-threshold number-of-squares number-of-squares))
+                  (reset! world (wrap-positions new-world))
+                  (reset! world (initialize-world)))))
       :size [(* pixels-per-square number-of-squares)
              (* pixels-per-square number-of-squares)])))
 
