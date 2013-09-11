@@ -3,7 +3,7 @@
             [game-of-life.rules :refer :all]))
 
 (deftest test-conways-rule
-  (testing "Rules for cell initiation / propagation / termination."
+  (testing "Conway's rules for cell initiation / propagation / termination."
 
     ;; Live cells die with {0,1} neighbors die, as if by underpopulation.
     (is (false? (conways-rule true 0)))
